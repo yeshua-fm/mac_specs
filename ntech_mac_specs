@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Get the CPU brand name
+cpu_brand=$(sysctl -n machdep.cpu.brand_string)
+
+# Get the amount of RAM
+ram=$(sysctl -n hw.memsize)
+
+# Convert bytes to GB and round to 2 decimal places
+ram_gb=$(awk "BEGIN {printf \"%.2f\", ${ram}/1024/1024/1024}")
+
+# Get the disk size in bytes
+size=$(df -H / | tail -1 | awk '{print $2}')
+# Get Serial Number
+serial_number=$(ioreg -rd1 -c IOPlatformExpertDevice | awk -F'"' '/IOPlatformSerialNumber/{print $4}')
+
+# Convert bytes to GB and round to 2 decimal places
+size_gb=$(awk "BEGIN {printf \"%.2f\", ${size}/1024/1024}")
+#!/bin/bash
+
+# Output the information
+echo "Disk size: ${size_gb} GB"
+echo "CPU: ${cpu_brand}"
+echo "RAM: ${ram_gb} GB"
+echo "Serial Number is ${serial_number}"
+
